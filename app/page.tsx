@@ -1,7 +1,6 @@
 import { Search, Filter } from "lucide-react"
 import Link from "next/link"
 import { RestaurantCard } from "@/components/restaurant-card"
-import { FilterBar } from "@/components/filter-bar"
 import { Hero } from "@/components/hero"
 import { getRestaurants } from "@/lib/notion"
 
@@ -54,7 +53,6 @@ export default async function Home() {
           </div>
         </div>
 
-        <FilterBar />
 
         {restaurants.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mt-6 md:mt-8">
