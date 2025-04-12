@@ -11,6 +11,14 @@ export default async function Home() {
   try {
     // Fetch restaurants from Notion
     restaurants = await getRestaurants()
+    const recommendationOrder = {
+      "Highly recommend": 0,
+      "Recommend": 1,
+      "Do not recommend": 2,
+    }
+    restaurants.sort((a, b) => {
+      return recommendationOrder[a.recommend] - recommendationOrder[b.recommend]
+    })
     console.log("Successfully fetched restaurants:", restaurants.length)
   } catch (error) {
     console.error("Failed to fetch restaurants:", error)
