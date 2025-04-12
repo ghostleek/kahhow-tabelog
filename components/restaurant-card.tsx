@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MapPin, Calendar, DollarSign } from "lucide-react"
+import { MapPin, Calendar, DollarSign, ThumbsUp } from "lucide-react"
 
 interface Restaurant {
   id: string

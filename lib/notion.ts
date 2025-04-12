@@ -71,7 +71,7 @@ export async function getRestaurants(): Promise<Restaurant[]> {
         const address = properties?.Address?.rich_text?.[0]?.plain_text || ""
         const comments = properties?.Comments?.rich_text?.[0]?.plain_text || ""
         const country = properties?.Country?.select?.name || ""
-        const recommend = properties?.Recommend?.select?.name || ""
+        const recommend = properties?.["Recommend?"].select?.name || ""
 
         restaurants.push({
           id: page.id,
@@ -116,7 +116,7 @@ export async function getRestaurantById(id: string): Promise<Restaurant | null> 
     const address = properties?.Address?.rich_text?.[0]?.plain_text || ""
     const comments = properties?.Comments?.rich_text?.[0]?.plain_text || ""
     const country = properties?.Country?.select?.name || ""
-    const recommend = properties?.Recommend?.select?.name || ""
+    const recommend = properties?.["Recommend?"]?.select?.name || ""
 
     // For a real implementation, you would fetch the page content for the full review
     // This is simplified for now
