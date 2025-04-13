@@ -10,10 +10,9 @@ export default async function Home() {
 
   try {
     // Fetch restaurants from Notion
+    restaurants = await getRestaurants()
     restaurants = restaurants.filter(
-      (r) =>
-        r.country?.toLowerCase().trim() === "singapore" &&
-        r.recommend?.toLowerCase().trim() !== "do not recommend"
+      (r) => r.country === "Singapore"
     )
         const recommendationOrder = {
       "Highly recommend": 0,
@@ -24,6 +23,7 @@ export default async function Home() {
       return recommendationOrder[a.recommend] - recommendationOrder[b.recommend]
     })
     console.log("Successfully fetched restaurants:", restaurants.length)
+    console.log("All countries:", restaurants.map((r) => `"${r.country}"`))
   } catch (error) {
     console.error("Failed to fetch restaurants:", error)
     // Provide fallback data if the fetch fails
@@ -47,7 +47,6 @@ export default async function Home() {
       <Hero />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
         {restaurants.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mt-6 md:mt-8">
             {restaurants.map((restaurant) => (
