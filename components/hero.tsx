@@ -7,7 +7,7 @@ export function Hero() {
         <div className="max-w-3xl">
           <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium mb-2 md:mb-4">Kahhow's 食べログ</h1>
           <p className="text-base md:text-lg text-gray-200 mb-4 md:mb-6 max-w-2xl">
-            Reviews of food places I've paid for and ranked
+            Reviews of food places in Singapore I've paid for and recommend
           </p>
 
           <div className="relative max-w-md">

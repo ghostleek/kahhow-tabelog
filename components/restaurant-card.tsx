@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MapPin, Calendar, DollarSign } from "lucide-react"
+import { MapPin, Calendar, DollarSign, ThumbsUp } from "lucide-react"
 
 interface Restaurant {
   id: string
@@ -26,7 +26,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           <h3 className="font-serif text-lg font-medium text-gray-900 line-clamp-1 group-hover:text-gray-700">
             {restaurant.name}
           </h3>
-          <RecommendationBadge recommendation={restaurant.recommend} />
+          <VerdictIcon recommendation={restaurant.recommend} />
         </div>
 
         <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -59,17 +59,21 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
   )
 }
 
-function RecommendationBadge({ recommendation }: { recommendation: string }) {
-  const getColor = () => {
-    switch (recommendation) {
-      case "Highly recommend":
-        return "bg-green-50 text-green-700 border-green-200"
-      case "Recommend":
-        return "bg-amber-50 text-amber-700 border-amber-200"
-      default:
-        return "bg-gray-50 text-gray-700 border-gray-200"
-    }
-  }
+function VerdictIcon({ recommendation }: { recommendation: string }) {
+  const isHigh = recommendation === "Highly recommend"
 
-  return <span className={`text-xs font-medium px-2 py-1 rounded-full border ${getColor()}`}>{recommendation}</span>
+  const className = `inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium border ${
+    isHigh
+      ? "bg-green-50 text-green-700 border-green-200"
+      : recommendation === "Recommend"
+      ? "bg-amber-50 text-amber-700 border-amber-200"
+      : "bg-gray-50 text-gray-700 border-gray-200"
+  }`
+
+  return (
+    <span className={className}>
+      <ThumbsUp className="h-4 w-4" />
+      {isHigh && <ThumbsUp className="h-4 w-4" />}
+    </span>
+  )
 }
