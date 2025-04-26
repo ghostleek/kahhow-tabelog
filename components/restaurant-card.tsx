@@ -12,6 +12,7 @@ interface Restaurant {
   country: string
   recommend: string
   image: string
+  slug: string
 }
 
 interface RestaurantCardProps {
@@ -20,7 +21,7 @@ interface RestaurantCardProps {
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
   return (
-    <Link href={`/restaurant/${restaurant.id}`} className="group">
+    <Link href={`/restaurant/${restaurant.slug}`} className="group">
       <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all duration-200 hover:shadow-md p-4 h-[220px] flex flex-col">
         <div className="mb-2 flex items-center justify-between">
           <h3 className="font-serif text-lg font-medium text-gray-900 line-clamp-1 group-hover:text-gray-700">

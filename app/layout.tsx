@@ -2,6 +2,7 @@ import type React from "react"
 import "@/app/globals.css"
 import { Inter, Playfair_Display } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+import Analytics from "@/components/analytics"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,14 +26,8 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
-      </body>
+        {process.env.NODE_ENV === "production" && <Analytics />}
+        </body>
     </html>
   )
 }
-
-
-import './globals.css'
-
-export const metadata = {
-      generator: 'v0.dev'
-    };
