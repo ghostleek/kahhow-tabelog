@@ -5,9 +5,10 @@ import { ExtendedRecordMap } from "notion-types";
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const databaseId = process.env.NOTION_DATABASE_ID;
 function normalizeId(id: string): string {
-  if (id.includes("-")) return id;
-  return `${id.substring(0,8)}-${id.substring(8,12)}-${id.substring(12,16)}-${id.substring(16,20)}-${id.substring(20)}`;
+  const cleanId = id.replace(/-/g, ""); // remove hyphens if any
+  return `${cleanId.substring(0,8)}-${cleanId.substring(8,12)}-${cleanId.substring(12,16)}-${cleanId.substring(16,20)}-${cleanId.substring(20)}`;
 }
+
 
 export interface Restaurant {
   id: string;
@@ -55,7 +56,7 @@ export async function getRestaurants(): Promise<Restaurant[]> {
         const recommend = properties?.["Recommend?"]?.select?.name || "";
 
         restaurants.push({
-          id: page.id,
+          id: normalizeId(page.id),
           name,
           tags,
           visitDate: formatDate(visitDateRaw),

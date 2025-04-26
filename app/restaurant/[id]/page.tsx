@@ -22,16 +22,15 @@ const flagEmojiToCountry: Record<string, string> = {
   // Add more if needed
 };
 
-export default async function RestaurantPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const restaurant = await getRestaurantById(params.id);
+export default async function RestaurantPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+
+  const restaurant = await getRestaurantById(id);
 
   if (!restaurant) {
     notFound();
   }
+
 
   return (
     <main className="min-h-screen bg-white">
@@ -85,11 +84,12 @@ export default async function RestaurantPage({
               Review
             </h2>
               <p>{restaurant.comments}</p>
-
               {restaurant.recordMap ? (
                 <NotionRendererWrapper recordMap={restaurant.recordMap} />
+              ) : restaurant.comments ? (
+                <p className="text-gray-700">{restaurant.comments}</p>
               ) : (
-                <p>{restaurant.comments}</p>
+                <p className="text-gray-400 italic">No review available yet.</p>
               )}
           </div>
           
