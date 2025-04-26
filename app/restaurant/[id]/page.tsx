@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import NotionRendererWrapper from "@/components/NotionRendererWrapper";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -8,7 +8,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { getRestaurantById } from "@/lib/notion";
 import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { ShareButton } from "@/components/ShareButton";
 
 
@@ -86,6 +85,10 @@ export default async function RestaurantPage({
               Review
             </h2>
               <p>{restaurant.comments}</p>
+
+              <div className="prose prose-lg max-w-none mb-12">
+                <NotionRendererWrapper recordMap={restaurant.recordMap} />
+              </div>
           </div>
           
           <ShareButton
