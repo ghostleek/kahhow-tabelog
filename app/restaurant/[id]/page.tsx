@@ -11,6 +11,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ShareButton } from "@/components/ShareButton";
 
+
 const flagEmojiToCountry: Record<string, string> = {
   "🇨🇳": "Chinese",
   "🇮🇳": "Indian",
@@ -43,7 +44,7 @@ export default async function RestaurantPage({
               className="inline-flex items-center text-white mb-2 md:mb-4 hover:underline text-sm"
             >
               <ArrowLeft className="mr-1 h-3 w-3" />
-              Back to all reviews
+              All reviews
             </Link>
 
             <h1 className="font-serif text-2xl md:text-3xl lg:text-4xl font-medium text-white mb-2">
@@ -84,16 +85,18 @@ export default async function RestaurantPage({
             <h2 className="font-serif text-2xl font-medium text-gray-900 mb-4">
               Review
             </h2>
-            {restaurant.fullReview ? (
-              <MDXRemote source={restaurant.fullReview} />
-            ) : (
               <p>{restaurant.comments}</p>
-            )}
           </div>
+          
           <ShareButton
             title={restaurant.name}
             url={`${process.env.NEXT_PUBLIC_BASE_URL}/restaurant/${params.id}`}
           />
+        {restaurant.fullReview ? (
+          <div dangerouslySetInnerHTML={{ __html: restaurant.fullReview }} />
+        ) : (
+          <p>{restaurant.comments}</p>
+        )}
         </div>
 
 
@@ -155,7 +158,7 @@ export default async function RestaurantPage({
                     className="inline-flex items-center text-black hover:underline text-sm"
                   >
                     <ArrowLeft className="mr-1 h-3 w-3 text-black" />
-                    Back to all reviews
+                    All reviews
                   </Link>
                 </div>
               </div>

@@ -23,7 +23,6 @@ export default async function Home() {
       return recommendationOrder[a.recommend] - recommendationOrder[b.recommend]
     })
     console.log("Successfully fetched restaurants:", restaurants.length)
-    console.log("All countries:", restaurants.map((r) => `"${r.country}"`))
   } catch (error) {
     console.error("Failed to fetch restaurants:", error)
     // Provide fallback data if the fetch fails

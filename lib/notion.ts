@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client"
+import { NotionAPI } from "notion-client";
 
 // Initialize Notion client with error handling
 let notion: Client
@@ -13,8 +14,25 @@ try {
 }
 
 const databaseId = process.env.NOTION_DATABASE_ID
+const blocks = await notion.blocks.children.list({ block_id: id });
+
+const fullReview = blocks.results
+  .map((block: any) => {
+    if (block.type === "paragraph") {
+      return block.paragraph.rich_text.map((t: any) => t.plain_text).join("");
+    } else if (block.type === "image") {
+      const file = block.image;
+      const url =
+        file.type === "external" ? file.external.url : file.file.url;
+      return `<img src="${url}" alt="Image" style="margin-top:1rem; border-radius:0.5rem; max-width:100%"/>`;
+    }
+    return "";
+  })
+  .filter(Boolean)
+  .join("\n\n");
 
 export interface Restaurant {
+  fullReview: any
   id: string
   name: string
   tags: string[]
@@ -24,7 +42,7 @@ export interface Restaurant {
   comments: string
   country: string
   recommend: string
-  fullReview?: string
+  recordMap?: ExtendedRecordMap;
 }
 
 export async function getRestaurants(): Promise<Restaurant[]> {
@@ -77,6 +95,7 @@ export async function getRestaurants(): Promise<Restaurant[]> {
           comments,
           country,
           recommend,
+          recordMap,
         })
       } catch (pageError) {
         console.error("Error processing page:", pageError)
@@ -99,8 +118,10 @@ export async function getRestaurantById(id: string): Promise<Restaurant | null> 
 
   try {
     // Get the page
+    const notionClient = new NotionAPI();
     const page = await notion.pages.retrieve({ page_id: id })
-    const properties = page.properties as any
+    const properties = page.properties as anyrecordMap
+    const recordMap = await notionClient.getPage(id);
 
     // Extract basic properties with safe fallbacks
     const name = properties?.Name?.title?.[0]?.plain_text || "Unnamed"
@@ -111,21 +132,6 @@ export async function getRestaurantById(id: string): Promise<Restaurant | null> 
     const comments = properties?.Comments?.rich_text?.[0]?.plain_text || ""
     const country = properties?.Country?.select?.name || ""
     const recommend = properties?.["Recommend?"]?.select?.name || ""
-
-    // For a real implementation, you would fetch the page content for the full review
-    // This is simplified for now
-    const fullReview = comments
-
-    // For a real implementation, you would also fetch dishes from a related database or page
-    // This is a simplified example
-    const dishes = [
-      {
-        name: "Sample Dish",
-        rating: 4.5,
-        price: 15,
-        image: "/placeholder.svg?height=300&width=400",
-      },
-    ]
 
     return {
       id,
@@ -153,7 +159,7 @@ function formatDate(dateString: string): string {
     const date = new Date(dateString)
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
     }
 
