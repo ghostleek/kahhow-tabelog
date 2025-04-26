@@ -26,15 +26,8 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
-        <Analytics /> 
-      </body>
+        {process.env.NODE_ENV === "production" && <Analytics />}
+        </body>
     </html>
   )
 }
-
-
-import './globals.css'
-
-export const metadata = {
-      generator: 'v0.dev'
-    };
