@@ -59,14 +59,6 @@ export default async function Home() {
           </div>
         )}
 
-        <div className="mt-12 text-center">
-          <Link
-            href="#"
-            className="inline-block px-6 py-3 border border-gray-900 text-gray-900 font-medium text-sm rounded-full hover:bg-gray-900 hover:text-white transition-colors duration-200"
-          >
-            View All Reviews
-          </Link>
-        </div>
       </div>
     </main>
   )
