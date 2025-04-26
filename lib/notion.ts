@@ -4,6 +4,10 @@ import { ExtendedRecordMap } from "notion-types";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const databaseId = process.env.NOTION_DATABASE_ID;
+function normalizeId(id: string): string {
+  if (id.includes("-")) return id;
+  return `${id.substring(0,8)}-${id.substring(8,12)}-${id.substring(12,16)}-${id.substring(16,20)}-${id.substring(20)}`;
+}
 
 export interface Restaurant {
   id: string;
@@ -60,6 +64,7 @@ export async function getRestaurants(): Promise<Restaurant[]> {
           comments,
           country,
           recommend,
+          // NO recordMap here
         });
       } catch (error) {
         console.error("Error processing page:", error);
@@ -73,12 +78,15 @@ export async function getRestaurants(): Promise<Restaurant[]> {
   }
 }
 
+
 export async function getRestaurantById(id: string): Promise<Restaurant | null> {
   try {
-    const page = await notion.pages.retrieve({ page_id: id });
-    const properties = (page as any).properties;
+    const normalizedId = normalizeId(id);
     const notionClient = new NotionAPI();
-    const recordMap = await notionClient.getPage(id);
+
+    const page = await notion.pages.retrieve({ page_id: normalizedId });
+    const properties = (page as any).properties;
+    const recordMap = await notionClient.getPage(normalizedId);
 
     const name = properties?.Name?.title?.[0]?.plain_text || "Unnamed";
     const tags = properties?.Tags?.multi_select?.map((tag: any) => tag.name) || [];
@@ -90,7 +98,7 @@ export async function getRestaurantById(id: string): Promise<Restaurant | null> 
     const recommend = properties?.["Recommend?"]?.select?.name || "";
 
     return {
-      id,
+      id: normalizedId,
       name,
       tags,
       visitDate: formatDate(visitDateRaw),
@@ -99,13 +107,14 @@ export async function getRestaurantById(id: string): Promise<Restaurant | null> 
       comments,
       country,
       recommend,
-      recordMap,
+      recordMap
     };
   } catch (error) {
     console.error("Error fetching restaurant from Notion:", error);
     return null;
   }
 }
+
 
 function formatDate(dateString: string): string {
   if (!dateString) return "";

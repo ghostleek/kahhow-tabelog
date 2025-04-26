@@ -86,20 +86,17 @@ export default async function RestaurantPage({
             </h2>
               <p>{restaurant.comments}</p>
 
-              <div className="prose prose-lg max-w-none mb-12">
+              {restaurant.recordMap ? (
                 <NotionRendererWrapper recordMap={restaurant.recordMap} />
-              </div>
+              ) : (
+                <p>{restaurant.comments}</p>
+              )}
           </div>
           
           <ShareButton
             title={restaurant.name}
             url={`${process.env.NEXT_PUBLIC_BASE_URL}/restaurant/${params.id}`}
           />
-        {restaurant.fullReview ? (
-          <div dangerouslySetInnerHTML={{ __html: restaurant.fullReview }} />
-        ) : (
-          <p>{restaurant.comments}</p>
-        )}
         </div>
 
 
