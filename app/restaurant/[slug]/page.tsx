@@ -6,7 +6,7 @@ import {
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getRestaurantById } from "@/lib/notion";
+import { getRestaurantById, getRestaurants } from "@/lib/notion";
 import { notFound } from "next/navigation";
 import { ShareButton } from "@/components/ShareButton";
 
@@ -25,7 +25,14 @@ const flagEmojiToCountry: Record<string, string> = {
 export default async function RestaurantPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
 
-  const restaurant = await getRestaurantById(slug);
+  const restaurants = await getRestaurants();
+  const matchingRestaurant = restaurants.find((r) => r.slug === slug);
+
+  if (!matchingRestaurant) {
+    notFound();
+  }
+
+  const restaurant = await getRestaurantById(matchingRestaurant.id);
 
   if (!restaurant) {
     notFound();

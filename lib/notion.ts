@@ -63,7 +63,7 @@ export async function getRestaurants(): Promise<Restaurant[]> {
         const recommend = properties?.["Recommend?"]?.select?.name || "";
 
         restaurants.push({
-          id: normalizeId(page.id),
+          id: page.id,
           name,
           tags,
           visitDate: formatDate(visitDateRaw),
@@ -140,7 +140,3 @@ function formatDate(dateString: string): string {
     return dateString;
   }
 }
-function slugify(name: any) {
-  throw new Error("Function not implemented.");
-}
-
