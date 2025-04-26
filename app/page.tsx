@@ -1,32 +1,32 @@
-import { Search, Filter } from "lucide-react"
-import Link from "next/link"
 import { RestaurantCard } from "@/components/restaurant-card"
 import { Hero } from "@/components/hero"
-import { getRestaurants } from "@/lib/notion"
+import { getRestaurants, Restaurant } from "@/lib/notion"
 
 export default async function Home() {
-  // Add error handling for the data fetching
-  let restaurants = []
+  let restaurants: Restaurant[] = []
 
   try {
-    // Fetch restaurants from Notion
     restaurants = await getRestaurants()
-    restaurants = restaurants.filter(
-      (r) => r.country === "Singapore"
-    )
-        const recommendationOrder = {
+
+    restaurants = restaurants
+      .filter((r) => r.country?.toLowerCase() === "singapore")
+      .filter((r) => r.recommend !== "Do not recommend") // 👈 EXCLUDE "Do not recommend"
+
+    const recommendationOrder = {
       "Highly recommend": 0,
       "Recommend": 1,
       "Do not recommend": 2,
     }
+
     restaurants.sort((a, b) => {
-      return recommendationOrder[a.recommend] - recommendationOrder[b.recommend]
+      const aOrder = recommendationOrder[a.recommend] ?? 99
+      const bOrder = recommendationOrder[b.recommend] ?? 99
+      return aOrder - bOrder
     })
+
     console.log("Successfully fetched restaurants:", restaurants.length)
-    console.log("All countries:", restaurants.map((r) => `"${r.country}"`))
   } catch (error) {
     console.error("Failed to fetch restaurants:", error)
-    // Provide fallback data if the fetch fails
     restaurants = [
       {
         id: "fallback-1",
@@ -58,15 +58,6 @@ export default async function Home() {
             <p className="text-gray-500">No restaurants found. Please check your Notion connection.</p>
           </div>
         )}
-
-        <div className="mt-12 text-center">
-          <Link
-            href="#"
-            className="inline-block px-6 py-3 border border-gray-900 text-gray-900 font-medium text-sm rounded-full hover:bg-gray-900 hover:text-white transition-colors duration-200"
-          >
-            View All Reviews
-          </Link>
-        </div>
       </div>
     </main>
   )

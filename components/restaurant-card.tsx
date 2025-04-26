@@ -49,7 +49,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           </div>
           <div className="flex items-center">
             <DollarSign className="mr-1 h-3 w-3" />
-            <span>${restaurant.price}/pax</span>
+            <span>{restaurant.price}/pax</span>
           </div>
         </div>
 
