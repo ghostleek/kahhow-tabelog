@@ -22,10 +22,10 @@ const flagEmojiToCountry: Record<string, string> = {
   // Add more if needed
 };
 
-export default async function RestaurantPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function RestaurantPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
 
-  const restaurant = await getRestaurantById(id);
+  const restaurant = await getRestaurantById(slug);
 
   if (!restaurant) {
     notFound();

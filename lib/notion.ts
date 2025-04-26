@@ -9,6 +9,12 @@ function normalizeId(id: string): string {
   return `${cleanId.substring(0,8)}-${cleanId.substring(8,12)}-${cleanId.substring(12,16)}-${cleanId.substring(16,20)}-${cleanId.substring(20)}`;
 }
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-") // replace non-alphanumeric with hyphens
+    .replace(/(^-|-$)+/g, ""); // remove leading/trailing hyphens
+}
 
 export interface Restaurant {
   id: string;
@@ -61,6 +67,7 @@ export async function getRestaurants(): Promise<Restaurant[]> {
           name,
           tags,
           visitDate: formatDate(visitDateRaw),
+          slug: slugify(name),
           price,
           address,
           comments,
@@ -91,6 +98,7 @@ export async function getRestaurantById(id: string): Promise<Restaurant | null> 
     const recordMap = await notionClient.getPage(normalizedId);
 
     const name = properties?.Name?.title?.[0]?.plain_text || "Unnamed";
+    const slug = slugify(name);
     const tags = properties?.Tags?.multi_select?.map((tag: any) => tag.name) || [];
     const visitDateRaw = properties?.["Visit Date"]?.date?.start || "";
     const price = properties?.["Price/pax"]?.number || 0;
@@ -132,3 +140,7 @@ function formatDate(dateString: string): string {
     return dateString;
   }
 }
+function slugify(name: any) {
+  throw new Error("Function not implemented.");
+}
+
