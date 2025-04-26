@@ -20,7 +20,8 @@ export interface Restaurant {
   comments: string;
   country: string;
   recommend: string;
-  recordMap?: ExtendedRecordMap; // only in getRestaurantById
+  recordMap?: ExtendedRecordMap;
+  slug: string;
 }
 
 export async function getRestaurants(): Promise<Restaurant[]> {
