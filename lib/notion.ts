@@ -25,12 +25,6 @@ export interface Restaurant {
   country: string
   recommend: string
   fullReview?: string
-  dishes?: {
-    name: string
-    rating: number
-    price: number
-    image: string
-  }[]
 }
 
 export async function getRestaurants(): Promise<Restaurant[]> {
@@ -144,7 +138,6 @@ export async function getRestaurantById(id: string): Promise<Restaurant | null> 
       country,
       recommend,
       fullReview,
-      dishes,
     }
   } catch (error) {
     console.error("Error fetching restaurant from Notion:", error)
