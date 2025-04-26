@@ -8,9 +8,9 @@ export default async function Home() {
   try {
     restaurants = await getRestaurants()
 
-    restaurants = restaurants.filter(
-      (r) => r.country?.toLowerCase() === "singapore"
-    )
+    restaurants = restaurants
+      .filter((r) => r.country?.toLowerCase() === "singapore")
+      .filter((r) => r.recommend !== "Do not recommend") // 👈 EXCLUDE "Do not recommend"
 
     const recommendationOrder = {
       "Highly recommend": 0,
