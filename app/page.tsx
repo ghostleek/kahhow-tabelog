@@ -2,6 +2,8 @@ import { RestaurantCard } from "@/components/restaurant-card"
 import { Hero } from "@/components/hero"
 import { getRestaurants, Restaurant } from "@/lib/notion"
 
+export const revalidate = 60;
+
 export default async function Home() {
   let restaurants: Restaurant[] = []
 
