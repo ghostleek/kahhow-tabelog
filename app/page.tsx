@@ -1,9 +1,8 @@
-import { RestaurantCard } from "@/components/restaurant-card";
 import { Hero } from "@/components/hero";
-import { getRestaurants, Restaurant } from "@/lib/notion";
-import { HomeClient } from "@/components/home-client"; // 👈 import client part here
+import { getRestaurants } from "@/lib/notion";
+import { HomeClient } from "@/components/home-client";
 
-export const revalidate = 60; // ✅ server-only ok
+export const revalidate = 60;
 
 export default async function HomePage() {
   const restaurants = await getRestaurants();
