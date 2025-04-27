@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { RestaurantCard } from "@/components/restaurant-card";
 import { Restaurant } from "@/lib/notion";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 const filterOptions = [
@@ -13,6 +14,7 @@ const filterOptions = [
 
 export function HomeClient({ restaurants }: { restaurants: Restaurant[] }) {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [isFiltering, setIsFiltering] = useState(false); 
 
   const handleFilter = (filter: string) => {
     setActiveFilter((prev) => (prev === filter ? null : filter));
@@ -24,6 +26,7 @@ export function HomeClient({ restaurants }: { restaurants: Restaurant[] }) {
       });
     }
   };
+  
 
   const clearFilters = () => {
     setActiveFilter(null);
@@ -60,14 +63,21 @@ export function HomeClient({ restaurants }: { restaurants: Restaurant[] }) {
             {option.label}
           </button>
         ))}
-      {activeFilter && (
-          <button
-            onClick={clearFilters}
-            className="text-sm text-gray-600 underline hover:text-gray-800 ml-4"
-          >
-            Clear Filters
-          </button>
-        )}
+
+        <AnimatePresence>
+          {activeFilter && (
+            <motion.button
+              onClick={clearFilters}
+              initial={{ opacity: 0, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-sm text-gray-600 underline hover:text-gray-800 ml-4"
+            >
+              Clear Filters
+            </motion.button>
+          )}
+        </AnimatePresence>
       </div>
 
       {filteredRestaurants.length > 0 ? (
