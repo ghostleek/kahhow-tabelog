@@ -4,6 +4,13 @@ import { useState } from "react";
 import { RestaurantCard } from "@/components/restaurant-card";
 import { Restaurant } from "@/lib/notion";
 
+
+const filterOptions = [
+    { label: "Hawker", tag: "Hawker" },
+    { label: "Alcohol", tag: "🥂" },
+    { label: "Dessert", tag: "Dessert" },
+  ];
+
 export function HomeClient({ restaurants }: { restaurants: Restaurant[] }) {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
@@ -18,30 +25,49 @@ export function HomeClient({ restaurants }: { restaurants: Restaurant[] }) {
     }
   };
 
+  const clearFilters = () => {
+    setActiveFilter(null);
+
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "filter_click", {
+        event_category: "Filter",
+        event_label: "Clear Filters",
+      });
+    }
+  };
+
   const filteredRestaurants = restaurants.filter((r) => {
     if (!activeFilter) return true;
-    if (activeFilter === "Visited >5") return r.tags.includes("Visited >5");
-    if (activeFilter === "Alcohol") return r.tags.includes("Alcohol");
-    if (activeFilter === "Dessert") return r.tags.includes("Dessert");
-    return true;
+
+    const activeTag = filterOptions.find((opt) => opt.label === activeFilter)?.tag;
+
+    return activeTag ? r.tags.includes(activeTag) : true;
   });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex gap-2 mb-8">
-        {["Visited >5", "Alcohol", "Dessert"].map((filter) => (
+      <div className="flex flex-wrap gap-2 mb-8 items-center">
+        {filterOptions.map((option) => (
           <button
-            key={filter}
-            onClick={() => handleFilter(filter)}
+            key={option.label}
+            onClick={() => handleFilter(option.label)}
             className={`px-4 py-2 rounded-full text-sm ${
-              activeFilter === filter
+              activeFilter === option.label
                 ? "bg-gray-900 text-white"
                 : "bg-gray-200 text-gray-700"
             }`}
           >
-            {filter}
+            {option.label}
           </button>
         ))}
+      {activeFilter && (
+          <button
+            onClick={clearFilters}
+            className="text-sm text-gray-600 underline hover:text-gray-800 ml-4"
+          >
+            Clear Filters
+          </button>
+        )}
       </div>
 
       {filteredRestaurants.length > 0 ? (
